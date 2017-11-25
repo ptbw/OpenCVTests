@@ -2,9 +2,11 @@
 #include <iostream>
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "raspicam/raspicam_cv.h"
 
 using namespace cv;
 using namespace std;
+using namespace raspicam;
 
 //Red 	0,145,128	- 10, 255, 255
 //Green 	51,127,62	- 75,255,255
@@ -24,50 +26,38 @@ enum Colours { Red,	Green, Blue, Yellow };
 
 int main( int argc, char** argv )
  {
-    VideoCapture cap(0); //capture the video from webcam
+    //VideoCapture cap(0); //capture the video from webcam
 
-    if ( !cap.isOpened() )  // if not success, exit program
-    {
-         cout << "Cannot open the web cam" << endl;
-         return -1;
+    //if ( !cap.isOpened() )  // if not success, exit program
+    //{
+         //cout << "Cannot open the web cam" << endl;
+         //return -1;
+    //}
+
+	RaspiCam_Cv Camera;
+    
+    Camera.set (CV_CAP_PROP_FORMAT, CV_8UC3 );  
+    Camera.set (CV_CAP_PROP_FRAME_WIDTH, 320 );
+    Camera.set (CV_CAP_PROP_FRAME_HEIGHT, 240 );
+    Camera.set (CV_CAP_PROP_BRIGHTNESS, 50 );
+	//Camera.set (CV_CAP_PROP_CONTRAST, 80 );	 
+	//Camera.set (CV_CAP_PROP_GAIN, 90 );
+	//Camera.set (CV_CAP_PROP_WHITE_BALANCE_RED_V, 1);
+    //Camera.set (CV_CAP_PROP_WHITE_BALANCE_BLUE_U, 1);
+    
+    if ( !Camera.open() ) {
+        fprintf(stderr, "Failed to init open camera\n");   
+		exit(-1);
     }
-
-	//namedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
-
-	//int iLowH = 170;
-	//int iHighH = 179;
-
-	//int iLowS = 150; 
-	//int iHighS = 255;
-
-	//int iLowV = 60;
-	//int iHighV = 255;
-
-	////Create trackbars in "Control" window
-	//createTrackbar("LowH", "Control", &iLowH, 179); //Hue (0 - 179)
-	//createTrackbar("HighH", "Control", &iHighH, 179);
-
-	//createTrackbar("LowS", "Control", &iLowS, 255); //Saturation (0 - 255)
-	//createTrackbar("HighS", "Control", &iHighS, 255);
-
-	//createTrackbar("LowV", "Control", &iLowV, 255);//Value (0 - 255)
-	//createTrackbar("HighV", "Control", &iHighV, 255);
-	//int iLastX = -1; 
-	//int iLastY = -1;
-
-	////Capture a temporary image from the camera
-	//Mat imgTmp;
-	//cap.read(imgTmp); 
-
-	////Create a black image with the size as the camera output
-	//Mat imgLines = Mat::zeros( imgTmp.size(), CV_8UC3 );; 
-	
 
     while (true)
     {
         Mat imgOriginal;
 
-        bool bSuccess = cap.read(imgOriginal); // read a new frame from video
+		bool bSuccess = Camera.grab();
+		Camera.retrieve(imgOriginal);
+		
+        //bool bSuccess = cap.read(imgOriginal); // read a new frame from video
 
         if (!bSuccess) //if not success, break loop
         {
