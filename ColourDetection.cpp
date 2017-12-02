@@ -39,9 +39,9 @@ int main( int argc, char** argv )
     Camera.set (CV_CAP_PROP_FORMAT, CV_8UC3 );  
     Camera.set (CV_CAP_PROP_FRAME_WIDTH, 320 );
     Camera.set (CV_CAP_PROP_FRAME_HEIGHT, 240 );
-    Camera.set (CV_CAP_PROP_BRIGHTNESS, 50 );
-	//Camera.set (CV_CAP_PROP_CONTRAST, 80 );	 
-	//Camera.set (CV_CAP_PROP_GAIN, 90 );
+    Camera.set (CV_CAP_PROP_BRIGHTNESS, 60 );
+	Camera.set (CV_CAP_PROP_CONTRAST, 70 );	 
+	Camera.set (CV_CAP_PROP_GAIN, 50 );
 	//Camera.set (CV_CAP_PROP_WHITE_BALANCE_RED_V, 1);
     //Camera.set (CV_CAP_PROP_WHITE_BALANCE_BLUE_U, 1);
     
@@ -93,7 +93,7 @@ int main( int argc, char** argv )
 			double dArea = oMoments.m00;
 			
 			// if the area <= 10000, I consider that the there are no object in the image and it's because of the noise, the area is not zero 
-			if (dArea > 100000)
+			if (dArea > 50000)
 			{
 				//printf("Area = %f\n",dArea);
 				if(colour == Red)
@@ -120,7 +120,7 @@ int main( int argc, char** argv )
 					rectangle(imgOriginal,Point(0,0),Point(30,30),Scalar(0,0,0),CV_FILLED);
 				
 			}	
-			waitKey(5);
+			waitKey(10);
 		}
 
 		//imgOriginal = imgOriginal + imgLines;	
